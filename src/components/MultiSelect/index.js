@@ -5,6 +5,7 @@
 class MultiSelect {
   constructor(elementRef) {
     this.elementRef = elementRef;
+
     this.selectors = {
       selectedLabel: ".filter_dropdown-label",
       selectedValue: ".filter_dropdown-value",
@@ -22,6 +23,8 @@ class MultiSelect {
     );
 
     this._addEventListeners();
+    this._checkDefaultOption();
+    this._refreshDisplay();
   }
 
   // Private
@@ -33,6 +36,22 @@ class MultiSelect {
         input.addEventListener("change", () => {
           this._refreshDisplay();
         });
+      });
+  }
+
+  _checkDefaultOption() {
+    this.elementRef
+      .querySelectorAll("[data-multi-select-default-selected]")
+      .forEach((el) => {
+        const option = el.dataset.multiSelectDefaultSelected;
+        const checkbox = this.elementRef.querySelector(
+          `input[data-value='${option}']`
+        );
+
+        if (checkbox) {
+          checkbox.checked = true;
+          checkbox.previousSibling.classList.add("w--redirected-checked");
+        }
       });
   }
 
