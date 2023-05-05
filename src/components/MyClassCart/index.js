@@ -73,7 +73,7 @@ class MyClassCart {
         const defaultFilter = new Set();
 
         cartItems.forEach((item) => {
-          defaultFilter.add(item);
+          defaultFilter.add(item.slug);
         });
 
         cartInstance.filtersData = [
