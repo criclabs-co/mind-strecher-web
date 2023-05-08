@@ -1,4 +1,4 @@
-# mind-strecher-web
+# mind-stretcher-web
 
 ## Usage
 
