@@ -54,12 +54,11 @@ class CourseSuggestSection {
         const cartItems = CartAdapter.listCartItems();
 
         if (cartItems.length > 0) {
-          cartItems.forEach((item) => {
-            console.log(item);
-            item.attr.levels.forEach((level) => {
+          cartItems
+            .flatMap((item) => item.attr.levels)
+            .forEach((level) => {
               filter.add(level);
             });
-          });
         } else {
           filter.add("EMPTY_SUGGESTION");
         }
