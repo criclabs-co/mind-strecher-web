@@ -14,13 +14,16 @@ class ClassScheduleList {
     this.options = { ...DEFAULT_OPTIONS, ...options };
     this.selectors = {
       cartActionWrapper: ".class-schedule_add-wrapper",
+      listBody: ".class-schedule_list",
     };
 
+    this.listBody = this.elementRef.querySelector(this.selectors.listBody);
     this.defaultCourse = elementRef.dataset.defaultCourse;
     this.addScheduleButtons = [];
 
     this._addEventListeners();
     this._setupAddScheduleButton();
+    this._observeAddedButton();
 
     if (this.defaultCourse) {
       this.applyFilter([this.defaultCourse]);
@@ -80,5 +83,29 @@ class ClassScheduleList {
         const addScheduleButton = new AddScheduleButton(wrapper, this.options);
         this.addScheduleButtons.push(addScheduleButton);
       });
+  }
+
+  _observeAddedButton() {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type !== "childList") {
+          return;
+        }
+
+        const addedBtn = mutation.addedNodes[0]?.querySelector(
+          this.selectors.cartActionWrapper
+        );
+
+        if (addedBtn) {
+          const addScheduleButton = new AddScheduleButton(
+            addedBtn,
+            this.options
+          );
+          this.addScheduleButtons.push(addScheduleButton);
+        }
+      });
+    });
+
+    observer.observe(this.listBody, { childList: true });
   }
 }
