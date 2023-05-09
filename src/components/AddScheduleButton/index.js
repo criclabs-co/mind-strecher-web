@@ -8,11 +8,16 @@ class AddScheduleButton {
   constructor(elementRef, options = {}) {
     const DEFAULT_OPTIONS = { refreshCartDisplay: true };
 
+    this.elementRef = elementRef;
     this.options = { ...DEFAULT_OPTIONS, ...options };
     this.scheduleSlug = elementRef.dataset.scheduleSlug;
 
-    this.addButton = elementRef.querySelector("[data-cart-action='add']");
-    this.removeButton = elementRef.querySelector("[data-cart-action='remove']");
+    this.addButton = this.elementRef.querySelector("[data-cart-action='add']");
+    this.removeButton = this.elementRef.querySelector(
+      "[data-cart-action='remove']"
+    );
+
+    this.levelSlugs = this._getLevelSlugs();
 
     this.refreshDisplay();
 
@@ -21,7 +26,7 @@ class AddScheduleButton {
 
   refreshDisplay() {
     const cartItems = CartAdapter.listCartItems();
-    if (cartItems.includes(this.scheduleSlug)) {
+    if (cartItems.find((item) => item.slug == this.scheduleSlug)) {
       this.addButton.style.display = "none";
       this.removeButton.style.display = "flex";
     } else {
@@ -36,6 +41,7 @@ class AddScheduleButton {
     this.addButton.addEventListener("click", () => {
       CartAdapter.addCartItem(
         this.scheduleSlug,
+        { levels: this.levelSlugs },
         this.options.refreshCartDisplay
       );
 
@@ -52,5 +58,12 @@ class AddScheduleButton {
       this.addButton.style.display = "flex";
       this.removeButton.style.display = "none";
     });
+  }
+
+  _getLevelSlugs() {
+    const levelSlugs =
+      this.elementRef.querySelector("[data-level-slugs]").dataset.levelSlugs;
+
+    return levelSlugs.split(",").filter((slug) => !!slug);
   }
 }

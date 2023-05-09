@@ -18,47 +18,27 @@ class CartSubmitForm {
     this._addEventListeners();
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.formSubmitting) {
       return;
     }
 
     this.formSubmitting = true;
 
-    fetch("https://qvwbksxvagcitxawaeqn.functions.supabase.co/create-cart", {
-      method: "POST",
-      headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF2d2Jrc3h2YWdjaXR4YXdhZXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODI0MTQwNzIsImV4cCI6MTk5Nzk5MDA3Mn0.3yusDFlnyQ3Lb9iCP9z4joOn39usf-MFaspbKOVfCQ4",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        cart: JSON.stringify(CartAdapter.listCartItems()),
-        name: this.nameInputElement.value,
-        dialCode: this.phoneNumberInput.getSelectedCountryData().dialCode,
-        phoneNumber: this.phoneNumberInputElement.value,
-      }),
-    })
-      .then((res) => {
-        if (res.status !== 200) {
-          console.error("Failed to submit cart");
-          return;
-        }
+    try {
+      const cart = await this._createCart();
 
-        res.json().then((data) => {
-          window.open(
-            `https://wa.me/+6588838004?text=Hi%20MS%20Team%2C%20I%20am%20interested%20in%20the%20courses%20in%20my%20course%20basket%3A%20https%3A%2F%2Fwww.mindstretcher.com%2Fbasket%23${data.id}.%20Kindly%20assist%2C%20thank%20you!`,
-            "_blank"
-          );
+      window.open(
+        `https://wa.me/+6588838004?text=Hi%20MS%20Team%2C%20I%20am%20interested%20in%20the%20courses%20in%20my%20course%20basket%3A%20https%3A%2F%2Fmind-stretcher.webflow.io%2Fmy-class-basket%3Fid%3D${cart.id}%20Kindly%20assist%2C%20thank%20you!`,
+        "_blank"
+      );
 
-          this.nameInputElement.value = "";
-          this.phoneNumberInputElement.value = "";
-          CartAdapter.clearCart();
-        });
-      })
-      .finally(() => {
-        this.formSubmitting = false;
-      });
+      this.nameInputElement.value = "";
+      this.phoneNumberInputElement.value = "";
+      CartAdapter.clearCart();
+    } finally {
+      this.formSubmitting = false;
+    }
   }
 
   // Private
@@ -79,6 +59,34 @@ class CartSubmitForm {
   }
 
   _addEventListeners() {
-    this.submitBtn.addEventListener("click", () => this.onSubmit());
+    this.submitBtn.addEventListener("click", async () => this.onSubmit());
+  }
+
+  async _createCart() {
+    const apiURL =
+      "https://qvwbksxvagcitxawaeqn.functions.supabase.co/create-cart";
+    const token =
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqdnhpc2ZrdnFjdXlmZXNocmpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE4OTE5MTUsImV4cCI6MTk5NzQ2NzkxNX0.jIfzfWug64U4Q9V1MAy0prpcNhqqGkkx2odhZ4K0YJo";
+
+    const res = await fetch(apiURL, {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cart: JSON.stringify(CartAdapter.listCartItems()),
+        name: this.nameInputElement.value,
+        dialCode: this.phoneNumberInput.getSelectedCountryData().dialCode,
+        phoneNumber: this.phoneNumberInputElement.value,
+      }),
+    });
+
+    if (!res.ok) {
+      console.error("Failed to submit cart");
+      return;
+    }
+
+    return res.json();
   }
 }
