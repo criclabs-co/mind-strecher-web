@@ -27,11 +27,12 @@ class EventDatesComponent {
         currentContainer = this._createElement("div", "event-dates_container");
         component.appendChild(currentContainer);
 
-        const headerText = header.textContent.trim();
         const headerDiv = this._createElement("div", "event-dates_header");
+        let headerText = header.textContent.trim();
         currentContainer.appendChild(headerDiv);
 
         if (headerText.toLowerCase().startsWith("[bonus]")) {
+          headerText = headerText.replace(/^\[bonus\]\s*/i, "");
           const bonusSpan = this._createElement(
             "span",
             "event-dates_bonus-span"
