@@ -22,15 +22,16 @@ class CartAdapter {
    *
    * @function
    * @name addCartItem
-   * @param {string} item - Slug of schedule to add to the cart.
+   * @param {string} itemSlug - Slug of schedule to add to the cart.
+   * @param {object} [attr={}] - Additional attributes of the schedule
    * @param {boolean} [refreshCartDisplay=true] - Whether to refresh the cart HTML element. Default is true.
    * @returns {void}
    */
-  static addCartItem(item, refreshCartDisplay = true) {
+  static addCartItem(itemSlug, attr = {}, refreshCartDisplay = true) {
     const cartItems = this.listCartItems();
 
-    if (!cartItems.includes(item)) {
-      cartItems.push(item);
+    if (!cartItems.find((item) => item.slug == itemSlug)) {
+      cartItems.push({ slug: itemSlug, attr });
       localStorage.setItem("cart", JSON.stringify(cartItems));
 
       const event = new Event("cart-updated");
@@ -44,15 +45,17 @@ class CartAdapter {
    * Remove the given slug from the cart and update the local storage.
    *
    * @function
-   * @name addCartItem
-   * @param {string} item - Slug of schedule to remove from the cart.
+   * @name removeCartItem
+   * @param {string} itemSlug - Slug of schedule to remove from the cart.
    * @param {boolean} [refreshCartDisplay=true] - Whether to refresh the cart HTML element. Default is true.
    * @returns {void}
    */
-  static removeCartItem(item, refreshCartDisplay = true) {
+  static removeCartItem(itemSlug, refreshCartDisplay = true) {
     const cartItems = this.listCartItems();
 
-    const updatedCartItem = cartItems.filter((cartItem) => cartItem != item);
+    const updatedCartItem = cartItems.filter(
+      (cartItem) => cartItem.slug != itemSlug
+    );
     localStorage.setItem("cart", JSON.stringify(updatedCartItem));
 
     const event = new Event("cart-updated");
@@ -93,24 +96,22 @@ class CartAdapter {
           (instance) => instance.form.dataset.name == "cart"
         );
 
-        if (cartInstance == null) {
-          return;
-        }
-
-        const cartItems = JSON.parse(
-          localStorage.getItem("cart") || '["Empty Cart"]'
-        );
         const defaultFilter = new Set();
+        const cartItems = this.listCartItems();
 
-        cartItems.forEach((item) => {
-          defaultFilter.add(item);
-        });
+        if (cartItems.length > 0) {
+          cartItems.forEach((item) => {
+            defaultFilter.add(item.slug);
+          });
+        } else {
+          defaultFilter.add("EMPTY_CART");
+        }
 
         cartInstance.filtersData = [
           {
             filterKeys: ["schedule-slug"],
             originalFilterKeys: ["schedule-slug"],
-            hightlight: false,
+            highlight: false,
             elements: [],
             values: defaultFilter,
           },

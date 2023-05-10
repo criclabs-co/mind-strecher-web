@@ -9,7 +9,7 @@ class Cart {
     this.elementRef = elementRef;
 
     this._setupRemoveItemBtns();
-    this._setupCartItemObserver();
+    this._observeCartItem();
   }
 
   // Private
@@ -32,19 +32,19 @@ class Cart {
     }
   }
 
-  _setupCartItemObserver() {
+  _observeCartItem() {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.type === "childList") {
-          const addedItem = mutation.addedNodes[0];
+        if (mutation.type !== "childList") {
+          return;
+        }
 
-          if (addedItem) {
-            const button = addedItem.querySelector(
-              "[data-cart-action='remove']"
-            );
+        const addedBtn = mutation.addedNodes[0]?.querySelector(
+          "[data-cart-action='remove']"
+        );
 
-            this._setupRemoveBtn(button);
-          }
+        if (addedBtn) {
+          this._setupRemoveBtn(addedBtn);
         }
       });
     });
