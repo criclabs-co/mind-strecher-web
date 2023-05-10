@@ -1,5 +1,5 @@
 /**
- * Module Name: CheckoutSection
+ * Module Name: EventDatesComponent
  *
  */
 class EventDatesComponent {
@@ -104,15 +104,16 @@ class EventDatesComponent {
   _createElement(tag, className) {
     const element = document.createElement(tag);
     element.classList.add(className);
+
     return element;
   }
 
-  _createSeeMore(onclick) {
+  _createSeeMore(onClick) {
     const wrapper = this._createElement("div", "see-more-wrapper");
     const link = this._createElement("a", "see-more_link");
     link.textContent = "see more";
     link.href = "#";
-    link.onclick = onclick;
+    link.onclick = onClick;
 
     const img = this._createElement("img", "icon-1x1-small");
     img.classList.add("is-see-more");
@@ -121,6 +122,7 @@ class EventDatesComponent {
 
     wrapper.appendChild(link);
     link.appendChild(img);
+
     return wrapper;
   }
 
@@ -141,6 +143,7 @@ class EventDatesComponent {
             </clipPath>
           </defs>
           `;
+
     return svg;
   }
 
@@ -155,12 +158,14 @@ class EventDatesComponent {
           <title>Time icon</title>
           <path d="M12 22C6.477 22 2 17.523 2 12C2 6.477 6.477 2 12 2C17.523 2 22 6.477 22 12C22 17.523 17.523 22 12 22ZM12 20C14.1217 20 16.1566 19.1571 17.6569 17.6569C19.1571 16.1566 20 14.1217 20 12C20 9.87827 19.1571 7.84344 17.6569 6.34315C16.1566 4.84285 14.1217 4 12 4C9.87827 4 7.84344 4.84285 6.34315 6.34315C4.84285 7.84344 4 9.87827 4 12C4 14.1217 4.84285 16.1566 6.34315 17.6569C7.84344 19.1571 9.87827 20 12 20ZM13 12H17V14H11V7H13V12Z"/>
           `;
+
     return svg;
   }
 
   _createNextButton() {
     const link = this._createElement("a", "event-date_next-button");
     link.href = "#";
+
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.classList.add("icon-1x1-small");
     svg.setAttribute("width", "24");
@@ -178,6 +183,7 @@ class EventDatesComponent {
           </defs>
           `;
     link.appendChild(svg);
+
     return link;
   }
 
@@ -193,21 +199,24 @@ class EventDatesComponent {
             container.scrollBy(260, 0);
           };
           wrapper.appendChild(nextButton);
+
+          const onClickSeeMore = (e) => {
+            e.preventDefault();
+            if (container.classList.contains("is-expanded")) {
+              container.classList.remove("is-expanded");
+              nextButton.style.display = "flex";
+              e.target.childNodes[0].nodeValue = "see more";
+              e.target.childNodes[1].style.transform = "rotate(0deg)";
+            } else {
+              container.classList.add("is-expanded");
+              nextButton.style.display = "none";
+              e.target.childNodes[0].nodeValue = "see less";
+              e.target.childNodes[1].style.transform = "rotate(180deg)";
+            }
+          };
+
           wrapper.parentElement.appendChild(
-            this._createSeeMore((e) => {
-              e.preventDefault();
-              if (container.classList.contains("is-expanded")) {
-                container.classList.remove("is-expanded");
-                nextButton.style.display = "flex";
-                e.target.childNodes[0].nodeValue = "see more";
-                e.target.childNodes[1].style.transform = "rotate(0deg)";
-              } else {
-                container.classList.add("is-expanded");
-                nextButton.style.display = "none";
-                e.target.childNodes[0].nodeValue = "see less";
-                e.target.childNodes[1].style.transform = "rotate(180deg)";
-              }
-            })
+            this._createSeeMore(onClickSeeMore)
           );
         }
       });
