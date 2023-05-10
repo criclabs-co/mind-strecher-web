@@ -196,7 +196,7 @@ class EventDatesComponent {
           const nextButton = this._createNextButton(container);
           nextButton.onclick = (e) => {
             e.preventDefault();
-            container.scrollBy(260, 0);
+            container.scrollBy({ top: 0, left: 260, behavior: "smooth" });
           };
           wrapper.appendChild(nextButton);
 
