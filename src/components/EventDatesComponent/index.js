@@ -37,12 +37,6 @@ class EventDatesComponent {
           const bonusSpan = this._createElement("span", "bonus_span");
           bonusSpan.textContent = "Bonus";
           headerDiv.appendChild(bonusSpan);
-
-          let next = header.nextElementSibling;
-          while (next && !/^H1$/.test(next.tagName)) {
-            currentContainer.appendChild(next);
-            next = header.nextElementSibling;
-          }
         }
 
         headerDiv.appendChild(document.createTextNode(headerText));
