@@ -4,16 +4,17 @@
  */
 class EventDatesComponent {
   constructor(elementRef) {
-    const component = this._convertedComponentFromRichText(elementRef);
-    this._addSeeMoreAndNextButtonIfNeeded(component);
+    this.elementRef = elementRef;
+    this.component = this._convertedComponentFromRichText();
+    this._addSeeMoreAndNextButtonIfNeeded();
 
-    elementRef.replaceWith(component);
+    elementRef.replaceWith(this.component);
   }
 
   // Private
 
-  _convertedComponentFromRichText(elementRef) {
-    const headerElements = elementRef.querySelectorAll(
+  _convertedComponentFromRichText() {
+    const headerElements = this.elementRef.querySelectorAll(
       "h1, h2, h3, h4, h5, h6"
     );
 
@@ -188,8 +189,8 @@ class EventDatesComponent {
     return link;
   }
 
-  _addSeeMoreAndNextButtonIfNeeded(component) {
-    component
+  _addSeeMoreAndNextButtonIfNeeded() {
+    this.component
       .querySelectorAll(".event-date-cards_wrapper")
       .forEach((wrapper) => {
         const container = wrapper.querySelector(".event-date-cards_container");
