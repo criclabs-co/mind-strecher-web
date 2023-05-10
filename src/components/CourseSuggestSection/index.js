@@ -67,7 +67,7 @@ class CourseSuggestSection {
           {
             filterKeys: ["level-slug"],
             originalFilterKeys: ["level-slug"],
-            hightlight: false,
+            highlight: false,
             elements: [],
             values: filter,
           },
