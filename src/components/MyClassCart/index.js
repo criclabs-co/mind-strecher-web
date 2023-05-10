@@ -80,7 +80,7 @@ class MyClassCart {
           {
             filterKeys: ["schedule-slug"],
             originalFilterKeys: ["schedule-slug"],
-            hightlight: false,
+            highlight: false,
             elements: [],
             values: defaultFilter,
           },

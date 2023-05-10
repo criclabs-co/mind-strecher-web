@@ -53,7 +53,7 @@ class ClassScheduleList {
         this.classScheduleInstance.filtersData.push({
           filterKeys: ["course-slug"],
           originalFilterKeys: ["course-slug"],
-          hightlight: false,
+          highlight: false,
           elements: [],
           values: defaultFilter,
         });
