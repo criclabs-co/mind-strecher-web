@@ -35,7 +35,7 @@ class MyClassCart {
     const apiURL =
       "https://qvwbksxvagcitxawaeqn.functions.supabase.co/get-cart";
     const token =
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqdnhpc2ZrdnFjdXlmZXNocmpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODE4OTE5MTUsImV4cCI6MTk5NzQ2NzkxNX0.jIfzfWug64U4Q9V1MAy0prpcNhqqGkkx2odhZ4K0YJo";
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF2d2Jrc3h2YWdjaXR4YXdhZXFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODI0MTQwNzIsImV4cCI6MTk5Nzk5MDA3Mn0.3yusDFlnyQ3Lb9iCP9z4joOn39usf-MFaspbKOVfCQ4";
 
     const res = await fetch(apiURL, {
       method: "POST",
