@@ -8,13 +8,11 @@ class CartButton {
   constructor(elementRef) {
     this.elementRef = elementRef;
     this.cartBtn = this.elementRef.querySelector(".cart__button-wrapper");
-    this.cartBtnMobile = this.elementRef.querySelector(
-      ".cart__button-wrapper-mobile"
+    this.activeCartBtn = this.elementRef.querySelector(
+      ".cart__active-button-wrapper"
     );
 
-    this.tooltipCount = this.cartBtn.querySelector(".tooltip__count");
-    this.tooltipCountMobile =
-      this.cartBtnMobile.querySelector(".tooltip__count");
+    this.tooltipCount = this.elementRef.querySelector(".tooltip__count");
 
     this._addEventListeners();
     this._refreshDisplay();
@@ -31,13 +29,14 @@ class CartButton {
   _refreshDisplay() {
     const cartLength = CartAdapter.listCartItems().length;
 
-    if (cartLength != 0) {
-      this.tooltipCount.style.display = "block";
+    if (cartLength > 0) {
+      this.cartBtn.style.display = "none";
+      this.activeCartBtn.style.display = "block";
     } else {
-      this.tooltipCount.style.display = "none";
+      this.cartBtn.style.display = "block";
+      this.activeCartBtn.style.display = "none";
     }
 
     this.tooltipCount.innerText = cartLength;
-    this.tooltipCountMobile.innerText = cartLength;
   }
 }

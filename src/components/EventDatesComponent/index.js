@@ -6,9 +6,9 @@ class EventDatesComponent {
   constructor(elementRef) {
     this.elementRef = elementRef;
     this.component = this._convertedComponentFromRichText();
-    this._addSeeMoreAndNextButtonIfNeeded();
-
     elementRef.replaceWith(this.component);
+
+    this._addSeeMoreAndNextButtonIfNeeded();
   }
 
   // Private
