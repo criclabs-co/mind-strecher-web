@@ -9,7 +9,7 @@
 ```html
 <script
   defer
-  src="https://cdn.jsdelivr.net/gh/criclabs-co/mind-strecher-web@{tag-version}/src/{path-to-module}"
+  src="https://cdn.jsdelivr.net/gh/criclabs-co/mind-stretcher-web@{tag-version}/src/{path-to-module}"
 ></script>
 ```
 
