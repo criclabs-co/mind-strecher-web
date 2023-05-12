@@ -9,7 +9,10 @@ class Cart {
     this.elementRef = elementRef;
 
     this._setupRemoveItemBtns();
+    this._addEventListeners();
     this._observeCartItem();
+
+    this._refreshDisplay();
   }
 
   // Private
@@ -30,6 +33,47 @@ class Cart {
 
       btn.dataset.setup = true;
     }
+  }
+
+  _addEventListeners() {
+    window.addEventListener("cart-updated", () => {
+      this._refreshDisplay();
+    });
+  }
+
+  _refreshDisplay() {
+    window.fsAttributes = window.fsAttributes || [];
+    window.fsAttributes.push([
+      "cmsfilter",
+      (filterInstances) => {
+        const cartInstance = filterInstances.find(
+          (instance) => instance.form.dataset.name == "cart"
+        );
+
+        const defaultFilter = new Set();
+        const cartItems = CartAdapter.listCartItems();
+
+        if (cartItems.length > 0) {
+          cartItems.forEach((item) => {
+            defaultFilter.add(item.slug);
+          });
+        } else {
+          defaultFilter.add("EMPTY_CART");
+        }
+
+        cartInstance.filtersData = [
+          {
+            filterKeys: ["schedule-slug"],
+            originalFilterKeys: ["schedule-slug"],
+            highlight: false,
+            elements: [],
+            values: defaultFilter,
+          },
+        ];
+
+        cartInstance.applyFilters();
+      },
+    ]);
   }
 
   _observeCartItem() {

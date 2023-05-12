@@ -7,11 +7,9 @@
  *  - @finsweet/attributes-cmsload
  */
 class ClassScheduleList {
-  constructor(elementRef, options = {}) {
-    const DEFAULT_OPTIONS = { refreshCartDisplay: true };
-
+  constructor(elementRef) {
     this.elementRef = elementRef;
-    this.options = { ...DEFAULT_OPTIONS, ...options };
+
     this.selectors = {
       cartActionWrapper: ".class-schedule_add-wrapper",
       clearDefaultFilterBtn: "[data-class-schedule-list-clear-default]",
@@ -96,7 +94,7 @@ class ClassScheduleList {
     this.elementRef
       .querySelectorAll(this.selectors.cartActionWrapper)
       .forEach((wrapper) => {
-        const addScheduleButton = new AddScheduleButton(wrapper, this.options);
+        const addScheduleButton = new AddScheduleButton(wrapper);
         this.addScheduleButtons.push(addScheduleButton);
       });
   }
@@ -113,10 +111,7 @@ class ClassScheduleList {
         );
 
         if (addedBtn) {
-          const addScheduleButton = new AddScheduleButton(
-            addedBtn,
-            this.options
-          );
+          const addScheduleButton = new AddScheduleButton(addedBtn);
           this.addScheduleButtons.push(addScheduleButton);
         }
       });
