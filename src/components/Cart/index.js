@@ -7,6 +7,14 @@
 class Cart {
   constructor(elementRef) {
     this.elementRef = elementRef;
+    this.selectors = {
+      emptyPlaceholder: ".basket_empty-state",
+      removeBtn: "[data-cart-action='remove']",
+    };
+
+    this.emptyPlaceholder = document.querySelector(
+      this.selectors.emptyPlaceholder
+    );
 
     this._setupRemoveItemBtns();
     this._addEventListeners();
@@ -19,7 +27,7 @@ class Cart {
 
   _setupRemoveItemBtns() {
     this.elementRef
-      .querySelectorAll("[data-cart-action='remove']")
+      .querySelectorAll(this.selectors.removeBtn)
       .forEach((btn) => {
         this._setupRemoveBtn(btn);
       });
@@ -42,6 +50,18 @@ class Cart {
   }
 
   _refreshDisplay() {
+    const cartItems = CartAdapter.listCartItems();
+
+    this._refreshCartItem(cartItems);
+
+    if (cartItems.length > 0) {
+      this.emptyPlaceholder.style.display = "none";
+    } else {
+      this.emptyPlaceholder.style.display = "block";
+    }
+  }
+
+  _refreshCartItem(cartItems) {
     window.fsAttributes = window.fsAttributes || [];
     window.fsAttributes.push([
       "cmsfilter",
@@ -51,7 +71,6 @@ class Cart {
         );
 
         const defaultFilter = new Set();
-        const cartItems = CartAdapter.listCartItems();
 
         if (cartItems.length > 0) {
           cartItems.forEach((item) => {
@@ -84,7 +103,7 @@ class Cart {
         }
 
         const addedBtn = mutation.addedNodes[0]?.querySelector(
-          "[data-cart-action='remove']"
+          this.selectors.removeBtn
         );
 
         if (addedBtn) {
